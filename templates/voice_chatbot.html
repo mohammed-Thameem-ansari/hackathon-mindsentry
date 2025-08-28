@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .chatbot-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .chat-log {
+            border: 1px solid #ddd;
+            height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 5px;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .message.user {
+            background: #007bff;
+            color: white;
+            margin-left: 20%;
+            margin-right: 5px;
+        }
+        .message.ai {
+            background: #28a745;
+            color: white;
+            margin-right: 20%;
+            margin-left: 5px;
+        }
+        .controls {
+            margin: 10px 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #start-recording {
+            background: #007bff;
+            color: white;
+        }
+        #start-recording:hover:not(:disabled) {
+            background: #0056b3;
+        }
+        #stop-recording {
+            background: #dc3545;
+            color: white;
+        }
+        #stop-recording:hover:not(:disabled) {
+            background: #b02a37;
+        }
+        .back-btn {
+            background: #6c757d;
+            color: white;
+        }
+        .back-btn:hover {
+            background: #5a6268;
+        }
+        .response {
+            margin-top: 10px;
+            color: #333;
+            font-style: italic;
+        }
+        #waveform {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .wave {
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            margin: 0 2px;
+            background: #007bff;
+            animation: wave 1s infinite ease-in-out;
+        }
+        @keyframes wave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container">
+        <h1>🎙 Voice Chatbot</h1>
+        <p>Interact with our AI assistant using your voice.</p>
+        <div id="chat-log" class="chat-log"></div>
+        <div id="waveform">
+            <div class="wave" style="animation-delay: 0s"></div>
+            <div class="wave" style="animation-delay: 0.1s"></div>
+            <div class="wave" style="animation-delay: 0.2s"></div>
+            <div class="wave" style="animation-delay: 0.3s"></div>
+        </div>
+        <div class="controls">
+            <button id="start-recording" class="btn">🎤 Start Talking</button>
+            <button id="stop-recording" class="btn" disabled>🛑 Stop</button>
+        </div>
+        <div id="response" class="response"></div>
+        <button onclick="window.location.href='/'" class="btn back-btn">🏠 Back to Home</button>
+    </div>
+    <script>
+        const startButton = document.getElementById("start-recording");
+        const stopButton = document.getElementById("stop-recording");
+        const chatLog = document.getElementById("chat-log");
+        const responseDiv = document.getElementById("response");
+        const waveform = document.getElementById("waveform");
+
+        let recognition;
+        let isRecording = false;
+
+        // Initialize Speech Recognition
+        if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = "en-US";
+
+            recognition.onstart = () => {
+                isRecording = true;
+                responseDiv.textContent = "Listening...";
+                waveform.style.display = "block";
+                startButton.disabled = true;
+                stopButton.disabled = false;
+            };
+
+            recognition.onresult = async (event) => {
+                const userMessage = event.results[event.results.length - 1][0].transcript.trim();
+                if (userMessage) {
+                    addMessageToLog(userMessage, "user");
+                    responseDiv.textContent = "Processing...";
+                    await sendToChatbot(userMessage);
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error(`Recognition error: ${event.error}`);
+                responseDiv.textContent = `Error: ${event.error}`;
+                if (event.error === "no-speech") {
+                    recognition.stop();
+                    recognition.start();
+                }
+            };
+
+            recognition.onend = () => {
+                if (isRecording) {
+                    recognition.start();
+                } else {
+                    responseDiv.textContent = "Stopped listening.";
+                    waveform.style.display = "none";
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+                }
+            };
+        } else {
+            responseDiv.textContent = "Speech Recognition is not supported in this browser.";
+            startButton.disabled = true;
+            stopButton.disabled = true;
+        }
+
+        // Start Recording
+        startButton.addEventListener("click", () => {
+            if (!isRecording) {
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error("Error starting recognition:", error);
+                    responseDiv.textContent = "Error starting recognition.";
+                }
+            }
+        });
+
+        // Stop Recording
+        stopButton.addEventListener("click", () => {
+            if (isRecording) {
+                isRecording = false;
+                recognition.stop();
+            }
+        });
+
+        // Add message to chat log
+        function addMessageToLog(message, sender) {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = message;
+            chatLog.appendChild(messageDiv);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        // Send message to chatbot API (mock response for demo)
+        async function sendToChatbot(message) {
+            try {
+                // Mock API response for testing
+                const mockResponse = {
+                    response: `You said: "${message}". How can I assist you further?`
+                };
+
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                addMessageToLog(mockResponse.response, "ai");
+                responseDiv.textContent = "Ready for next input.";
+            } catch (error) {
+                console.error("Error sending message to chatbot:", error);
+                addMessageToLog("Error: Unable to connect to the server.", "ai");
+                responseDiv.textContent = "Error occurred.";
+            }
+        }
+    </script>
+</body>
+</html>

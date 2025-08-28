@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MindSentry Nova – Echoes of Emotion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Animations */
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(10px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(10px) rotate(-360deg); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(96, 165, 250, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(96, 165, 250, 0.8); }
+        }
+        @keyframes wavePulse {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(2.5); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Global Styles */
+        body {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1f 100%);
+            overflow-x: hidden;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .nova-text {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, #60A5FA, #A78BFA);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:hover {
+            transform: scale(1.05) rotate(1deg);
+            border-color: rgba(96, 165, 250, 0.3);
+            box-shadow: 0 0 30px rgba(96, 165, 250, 0.2);
+        }
+        .waveform .bar {
+            display: inline-block;
+            width: 5px;
+            height: 25px;
+            margin: 0 3px;
+            background: linear-gradient(180deg, #60A5FA, #1D4ED8);
+            border-radius: 5px;
+            animation: wavePulse 1.2s infinite ease-in-out;
+        }
+        .waveform .bar:nth-child(2) { animation-delay: 0.2s; }
+        .waveform .bar:nth-child(3) { animation-delay: 0.4s; }
+        .waveform .bar:nth-child(4) { animation-delay: 0.6s; }
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #60A5FA;
+            border-radius: 50%;
+            animation: orbit 6s infinite linear;
+        }
+        #spinner {
+            display: none;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #60A5FA;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="text-white relative">
+    <!-- Cosmic Background -->
+    <div class="fixed inset-0 pointer-events-none">
+        <div class="particle top-20 left-10"></div>
+        <div class="particle top-40 right-20" style="animation-duration: 8s;"></div>
+        <div class="particle bottom-30 left-30" style="animation-duration: 5s;"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f1f] via-transparent to-transparent z-10"></div>
+        <div class="relative z-20 flex text-center px-6">
+            <div class="flex flex-col items-center justify-center max-w-2xl mx-auto text-center">
+                <h1 class="text-5xl md:text-7xl font-bold nova-text animate-[pulseGlow_2s_infinite]">
+                    MindSentry Nova
+                </h1>
+                <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto animate-[float_3s_infinite]">
+                    A cosmic journey into your emotions, powered by AI.
+                </p>
+                <button class="mt-8 px-10 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-500 animate-[pulseGlow_2s_infinite]" onclick="scrollToSection('analyze')">
+                    Explore Now
+                </button>
+            </div>
+            <div width="300px" height="400px"><spline-viewer url="https://prod.spline.design/B7t4v-LpuyUgMf1e/scene.splinecode"></spline-viewer><div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-30 bg-[#0f0f1f]/90 backdrop-blur-lg py-4">
+        <div class="max-w-7xl mx-auto flex justify-center gap-12 px-6">
+            <button class="nav-tab text-gray-300 hover:nova-text text-lg font-semibold transition-all duration-300" data-section="analyze">Analyze</button>
+            <button class="nav-tab text-gray-300 hover:nova-text text-lg font-semibold transition-all duration-300" data-section="connect">Connect</button>
+            <button class="nav-tab text-gray-300 hover:nova-text text-lg font-semibold transition-all duration-300" data-section="therapy">Therapy</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-20 relative">
+        <!-- Analyze Section -->
+        <section id="analyze" class="section min-h-screen flex flex-col items-center gap-16">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold nova-text mb-4">Echoes of Your Mind</h2>
+                <p class="text-lg text-gray-400 max-w-xl">Decode your emotions through text and voice in a cosmic interface.</p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-10 w-full">
+                <!-- Text Analysis -->
+                <div class="card rounded-3xl p-8 flex-1 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/20 rounded-full blur-2xl animate-[float_4s_infinite]"></div>
+                    <h3 class="text-2xl font-semibold text-white mb-4">Text Nebula</h3>
+                    <textarea
+                        id="text-input"
+                        placeholder="Pour your thoughts into the void..."
+                        class="w-full h-48 p-4 rounded-xl bg-[#1a1a2e] text-white border-none focus:ring-2 focus:ring-blue-400/50 transition-all duration-300 resize-none"
+                    ></textarea>
+                    <button
+                        onclick="analyzeText()"
+                        class="w-full mt-6 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white py-3 rounded-xl font-semibold transition-all duration-300 animate-[pulseGlow_3s_infinite]"
+                    >
+                        Decode Emotions
+                    </button>
+                    <div id="spinner" class="mx-auto mt-4"></div>
+                    <p id="result" class="mt-4 text-gray-300 text-center"></p>
+                </div>
+                <!-- Voice Analysis -->
+                <div class="card rounded-3xl p-8 flex-1 relative overflow-hidden">
+                    <div class="absolute bottom-0 left-0 w-20 h-20 bg-purple-500/20 rounded-full blur-2xl animate-[float_5s_infinite]"></div>
+                    <h3 class="text-2xl font-semibold text-white mb-4">Sonic Waves</h3>
+                    <div id="waveform" class="waveform hidden my-6 text-center">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <button
+                        id="record-btn"
+                        onclick="toggleRecording()"
+                        class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 animate-[pulseGlow_3s_infinite]"
+                    >
+                        <span>🎙</span> Capture Voice
+                    </button>
+                    <div class="flex items-center gap-4 mt-4">
+                        <input
+                            type="file"
+                            id="audio-input"
+                            accept="audio/*"
+                            class="flex-1 text-gray-400 bg-[#1a1a2e] p-2 rounded-xl file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-gray-700 file:text-white file:hover:bg-gray-800 transition-all duration-300"
+                        >
+                        <button
+                            onclick="uploadAudio()"
+                            class="bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-800 hover:to-gray-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2"
+                        >
+                            <span>📤</span> Upload & Analyze
+                        </button>
+                    </div>
+                    <p id="trans_text" class="mt-4 text-gray-300 text-center"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Connect Section -->
+        <section id="connect" class="section min-h-screen hidden flex flex-col items-center gap-16">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold nova-text mb-4">Galactic Connections</h2>
+                <p class="text-lg text-gray-400 max-w-xl">Link with a constellation of souls for support.</p>
+            </div>
+            <div class="card rounded-3xl p-8 w-full max-w-lg relative">
+                <div class="absolute top-0 left-0 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl animate-[float_6s_infinite]"></div>
+                <h3 class="text-2xl font-semibold text-white mb-4">Stellar Hub</h3>
+                <input
+                    id="room-id"
+                    type="text"
+                    placeholder="Enter your cosmic ID..."
+                    class="w-full p-4 rounded-xl bg-[#1a1a2e] text-white border-none focus:ring-2 focus:ring-purple-400/50 transition-all duration-300"
+                />
+                <button
+                    onclick="window.location.href='/meeting-room'"
+                    class="w-full mt-6 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white py-3 rounded-xl font-semibold transition-all duration-300 animate-[pulseGlow_3s_infinite]"
+                >
+                    Join the Orbit
+                </button>
+            </div>
+        </section>
+
+        <!-- Therapy Section -->
+        <section id="therapy" class="section min-h-screen hidden flex flex-col items-center gap-16">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold nova-text mb-4">Celestial Calm</h2>
+                <p class="text-lg text-gray-400 max-w-xl">Drift into serenity with guided cosmic therapy.</p>
+            </div>
+            <div class="card rounded-3xl p-8 w-full max-w-lg relative">
+                <div class="absolute bottom-0 right-0 w-32 h-32 bg-purple-400/10 rounded-full blur-3xl animate-[float_7s_infinite]"></div>
+                <h3 class="text-2xl font-semibold text-white mb-4">Tranquility Portal</h3>
+                <p class="text-gray-400 mb-6">Embark on a journey to inner peace.</p>
+                <button
+                    onclick="window.location.href='/therapy'"
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 animate-[pulseGlow_3s_infinite]"
+                >
+                    <span>🌌</span> Enter Therapy
+                </button>
+                <button
+                    onclick="window.location.href='/voice-chatbot'"
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 animate-[pulseGlow_3s_infinite]"
+                >
+                    🎙 Voice Chatbot
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Logout Button -->
+    <button
+        onclick="window.location.href='/logout'"
+        class="fixed bottom-6 right-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-6 rounded-full font-semibold transition-all duration-300 animate-[pulseGlow_2s_infinite] z-30"
+    >
+        Logout
+    </button>
+
+    <!-- Footer -->
+    <footer class="w-full py-10 text-center text-gray-500 bg-[#0f0f1f]/50 relative z-10">
+        <p class="nova-text">MindSentry Nova © 2025 – A Cosmic Creation</p>
+    </footer>
+
+    <script>
+        // Section Navigation
+       const navTabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('.section');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const sectionId = tab.getAttribute('data-section');
+                sections.forEach(section => section.classList.add('hidden'));
+                document.getElementById(sectionId).classList.remove('hidden');
+                navTabs.forEach(t => t.classList.remove('nova-text'));
+                tab.classList.add('nova-text');
+            });
+        });
+
+        // Trigger first section by default
+        navTabs[0].click();
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.transform = `translateY(${scrollY * 0.05}px)`;
+            });
+        });
+
+        // Scroll to Section from Hero
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            sections.forEach(section => section.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            navTabs.forEach(t => t.classList.remove('nova-text'));
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('nova-text');
+        }
+    </script>
+    <script src="/static/scripts.js"></script>
+    <script src="/static/meeting-room.js"></script>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+</body>
+</html>

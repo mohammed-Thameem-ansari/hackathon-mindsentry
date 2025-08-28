@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Audio Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #60A5FA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            transition: box-shadow 0.3s ease;
+        }
+        .avatar.speaking {
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-4xl font-bold mb-2">Audio Room</h1>
+    <p id="room-info" class="text-lg mb-6">You are in room: general</p>
+    <div id="chatbot-prompt" class="hidden text-center mb-6">
+        <p class="mb-4">You're alone in the room. Would you like to chat with our AI chatbot?</p>
+        <button id="chat-with-bot" class="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600 transition">Chat with Chatbot</button>
+        <button id="stay-here" class="px-4 py-2 bg-gray-500 rounded-lg hover:bg-gray-600 transition">Stay Here</button>
+    </div>
+    <div id="user-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- User avatars will be dynamically added here -->
+    </div>
+    <button id="toggle-mic" class="mt-8 px-6 py-3 bg-blue-500 rounded-lg hover:bg-blue-600 transition">
+        Toggle Microphone
+    </button>
+    <div id="debug-log" class="mt-6 text-sm text-gray-400"></div>
+    <script src="/static/audio_room.js"></script>
+</body>
+</html>

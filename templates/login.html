@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - MindSentry Nova</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom styles for enhanced theme and creativity -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        /* Particle animation for background */
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(15px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+        .particle {
+            position: absolute;
+            background: rgba(0, 191, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        .particle-1 { width: 10px; height: 10px; top: 15%; left: 25%; animation-delay: 0s; }
+        .particle-2 { width: 15px; height: 15px; top: 40%; left: 75%; animation-delay: 1s; }
+        .particle-3 { width: 8px; height: 8px; top: 70%; left: 35%; animation-delay: 2s; }
+        .particle-4 { width: 12px; height: 12px; top: 85%; left: 85%; animation-delay: 3s; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(0, 191, 255, 0.3), inset 0 0 10px rgba(0, 191, 255, 0.1);
+            backdrop-filter: blur(15px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.5s ease-out;
+            z-index: 1;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 191, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #00BFFF;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.7);
+        }
+        p {
+            color: #aad2ff;
+            margin-bottom: 1.5rem;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.9rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #1e1e2f, #2a2a44);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.4s ease;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            background: linear-gradient(90deg, #25253a, #343456);
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.6), inset 0 0 5px rgba(0, 191, 255, 0.3);
+            transform: scale(1.02);
+        }
+        button {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(90deg, #00BFFF, #00aaff);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 191, 255, 0.4);
+        }
+        button:hover {
+            background: linear-gradient(90deg, #00aaff, #0088cc);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 191, 255, 0.6);
+        }
+        a {
+            color: #00BFFF;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #00BFFF;
+            transition: width 0.3s ease;
+        }
+        a:hover::after {
+            width: 100%;
+        }
+        a:hover {
+            color: #00aaff;
+        }
+        #message {
+            margin-top: 1rem;
+            color: #aad2ff;
+            min-height: 1rem;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px rgba(170, 210, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background particles for creative effect -->
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+    <div class="particle particle-4"></div>
+
+    <div class="card">
+        <h1>🧠 MindSentry Nova</h1>
+        <p class="text-lg">Welcome back—log in to continue your journey!</p>
+        <form action="/login" method="post" class="space-y-6">
+            <input type="text" name="username" placeholder="Enter your username" required class="w-full p-4 rounded-xl focus:ring-2 focus:ring-cyan-400">
+            <input type="password" name="password" placeholder="Enter your password" required class="w-full p-4 rounded-xl focus:ring-2 focus:ring-cyan-400">
+            <button type="submit" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">Log In</button>
+        </form>
+        <p class="mt-4">Don't have an account? <a href="/signup" class="relative text-cyan-300 hover:text-cyan-200">Sign up here</a></p>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            });
+            if (response.ok) window.location.href = '/';
+            else {
+                const data = await response.json();
+                document.getElementById('message').innerText = data.detail || 'Login failed';
+            }
+        });
+    </script>
+</body>
+</html>

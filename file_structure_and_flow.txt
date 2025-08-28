@@ -1,0 +1,49 @@
+File Structure and Flow of the Application:
+
+1. Backend:
+   - main.py:
+     * Defines API endpoints and WebSocket functionality.
+     * Handles sentiment analysis, audio transcription, and chat room management.
+     * Flow:
+       - Sentiment Analysis: sentiment.py -> main.py
+       - Audio Transcription: transcription.py -> main.py
+       - WebSocket Chat: main.py (manages WebSocket connections)
+
+   - transcription.py:
+     * Handles audio transcription using the Whisper model.
+     * Flow: Audio file -> transcription.py -> main.py
+
+   - sentiment.py:
+     * Performs sentiment analysis using Hugging Face Transformers.
+     * Flow: Text input -> sentiment.py -> main.py
+
+2. Frontend:
+   - templates/index.html:
+     * Main landing page for sentiment analysis and audio transcription.
+     * Allows navigation to the therapy page and meeting rooms.
+
+   - templates/therapy.html:
+     * Provides a relaxation page with soothing sounds and calming videos.
+
+   - templates/meeting_room.html:
+     * UI for the meeting room with WebSocket chat functionality.
+
+   - static/scripts.js:
+     * Handles frontend logic for sentiment analysis, audio transcription, and WebSocket chat.
+
+   - static/meeting-room.js:
+     * Manages WebSocket communication for the meeting room.
+
+   - static/room-navigation.js:
+     * Handles navigation to the meeting room.
+
+   - static/styles.css:
+     * Provides styling for the frontend pages.
+
+3. Entry Point:
+   - run.py:
+     * Starts the FastAPI application.
+
+4. Additional Notes:
+   - WebSocket communication is managed via the /ws/{room_id} endpoint in main.py.
+   - Sentiment analysis and transcription results are displayed on the frontend.

@@ -1,0 +1,211 @@
+/*
+File: styles.css
+Purpose: Provides styling for the frontend pages.
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+}
+
+h1 {
+    color: #00BFFF;
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    background: #1e1e2f;
+    color: white;
+    outline: none;
+}
+
+button {
+    margin-top: 15px;
+    background: #00BFFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #00aee0;
+}
+
+#result, #trans_text {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #aad2ff;
+}
+
+#spinner {
+    display: none;
+    margin: 15px auto;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid #00BFFF;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+.waveform {
+    margin-top: 10px;
+    display: none;
+}
+
+.bar {
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    margin: 0 1px;
+    background-color: #00BFFF;
+    animation: bounce 1s infinite ease-in-out;
+}
+
+.bar:nth-child(2) { animation-delay: 0.1s; }
+.bar:nth-child(3) { animation-delay: 0.2s; }
+.bar:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes bounce {
+    0%, 100% { height: 20px; }
+    50% { height: 40px; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.chat-box {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+    align-items: flex-start; /* Align all messages to the left by default */
+}
+
+#chatbot-prompt {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(0, 191, 255, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    font-style: italic;
+}
+
+.message {
+    display: flex; /* Use flexbox for better alignment */
+    flex-direction: row; /* Arrange spans in a row */
+    align-items: flex-start; /* Align spans to the top-left of the container */
+    text-align: left; /* Ensure text is left-aligned */
+    background-color: #f1f1f1; /* Light background for general messages */
+    color: #333; /* Dark text for contrast */
+    padding: 10px; /* Add padding inside the message box */
+    border-radius: 8px; /* Rounded corners for the message box */
+    margin-bottom: 10px; /* Add spacing between messages */
+    max-width: 70%; /* Limit the width of the message box */
+    word-wrap: break-word; /* Ensure long words wrap properly */
+    gap: 5px; /* Add spacing between spans */
+}
+
+.message span {
+    text-align: left; /* Ensure text inside spans is left-aligned */
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove any default padding */
+}
+
+.message.user {
+    background-color: #d1e7dd; /* Light green background for user messages */
+    align-self: flex-end; /* Align user messages to the right */
+    text-align: right; /* Right-align text for user messages */
+    color: #155724; /* Dark green text for contrast */
+}
+
+.message.ai {
+    background-color: #f8d7da; /* Light red background for AI messages */
+    align-self: flex-start; /* Align AI messages to the left */
+    text-align: left; /* Left-align text for AI messages */
+    color: #721c24; /* Dark red text for contrast */
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+
+#nickname-input{
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #1e1e2f;
+    color: white;
+    outline: none;
+    font-size: 16px;
+}
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #1e1e2f;
+    color: white;
+    outline: none;
+    font-size: 16px;
+}
+
+chat-input button {
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #00BFFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+chat-input button:hover {
+    background: #00aee0;
+}
