@@ -42,6 +42,7 @@ from .models import Base, User, Text
 from passlib.context import CryptContext
 from .gamification.routes import router as gamification_router
 from .routes import challenges as challenges_router
+from .leaderboard.routes import router as leaderboard_router
 import os
 from typing import Dict, List
 from random import choice
@@ -67,6 +68,7 @@ app.add_middleware(
 # Register gamification router
 app.include_router(gamification_router)
 app.include_router(challenges_router.router, prefix="/api", tags=["challenges"]) 
+app.include_router(leaderboard_router, prefix="/api")
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

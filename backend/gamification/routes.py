@@ -60,8 +60,7 @@ def complete_challenge(payload: schemas.CompleteRequest, db: Session = Depends(g
         challenge_id=challenge.id,
         user_id=payload.user_id,
         status="completed",
-        points_awarded=points,
-        evidence=payload.evidence,
+        score=points,
     )
     db.add(participation)
     ledger = gam_models.PointsLedger(user_id=payload.user_id, source="challenge", points=points)
