@@ -32,12 +32,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy import MetaData
+
+
 from .sentiment import analyze_sentiment
 from .transcription import transcribe_audio
 from .database import engine, get_db
 from .models import Base, User, Text
 # from audio_logic import process_audio
 from passlib.context import CryptContext
+from .gamification.routes import router as gamification_router
 import os
 from typing import Dict, List
 from random import choice
@@ -59,6 +62,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register gamification router
+app.include_router(gamification_router)
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
