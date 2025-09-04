@@ -59,3 +59,15 @@ class ChallengeParticipation(Base):
 
     user = relationship("User")
     challenge = relationship("Challenge")
+
+# Phase 4.2: Team bonus event tracking (no FK to teams to avoid missing table)
+class TeamBonusEvent(Base):
+    __tablename__ = "team_bonus_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    team_id = Column(Integer)  # adapt to ForeignKey("teams.id") if teams table exists
+    challenge_id = Column(Integer, ForeignKey("challenges.id"))
+    percent = Column(Float, default=0.0)
+    awarded_at = Column(DateTime, default=datetime.utcnow)
+
+    challenge = relationship("Challenge")

@@ -44,9 +44,13 @@ def team_completion_percent(db: Session, challenge_id: int, team_id: int, window
     return percent, completed_count
 
 
-def record_team_bonus_award(db: Session, team_id: int, challenge_id: int, awarded_at: datetime = None):
-    # Placeholder: no-op recorder; return True for now
-    return True
+def record_team_bonus_award(db: Session, team_id: int, challenge_id: int, percent: float):
+    from ..models import TeamBonusEvent
+    event = TeamBonusEvent(team_id=team_id, challenge_id=challenge_id, percent=percent)
+    db.add(event)
+    db.commit()
+    db.refresh(event)
+    return event
 
 
 def award_team_bonus_points(db: Session, team_id: int, amount_per_user: int, metadata: dict = None, challenge_id: int | None = None):

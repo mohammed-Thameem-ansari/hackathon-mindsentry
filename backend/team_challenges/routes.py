@@ -77,3 +77,19 @@ def get_percent(challenge_id: int = Query(...), team_id: int = Query(...), db: S
     return {"percent": percent, "completed_count": completed_count}
 
 
+@router.get("/events")
+def list_team_bonus_events(db: Session = Depends(get_db)):
+    from ..models import TeamBonusEvent
+    events = db.query(TeamBonusEvent).order_by(TeamBonusEvent.awarded_at.desc()).all()
+    return [
+        {
+            "id": e.id,
+            "team_id": e.team_id,
+            "challenge_id": e.challenge_id,
+            "percent": e.percent,
+            "awarded_at": e.awarded_at.isoformat() if e.awarded_at else None,
+        }
+        for e in events
+    ]
+
+
