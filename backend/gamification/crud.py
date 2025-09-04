@@ -17,3 +17,11 @@ def seed_catalog_if_missing(db: Session, catalog_path: str):
         db.commit()
 
 
+def get_challenge_by_id(db: Session, challenge_id):
+    try:
+        # support both int and str ids depending on schema
+        return db.query(models.Challenge).filter(models.Challenge.id == challenge_id).first()
+    except Exception:
+        return None
+
+
