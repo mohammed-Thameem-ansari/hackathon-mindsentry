@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, Boolean, JSON, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, JSON, Text
 from sqlalchemy.sql import func
 from ..database import Base
 import enum
@@ -44,26 +44,7 @@ class BadgeEarned(Base):
     earned_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
-class Challenge(Base):
-    __tablename__ = "challenges"
-    id = Column(String, primary_key=True, index=True)
-    title = Column(String, nullable=False)
-    description = Column(Text, nullable=True)
-    base_points = Column(Integer, nullable=False, default=10)
-    tags = Column(JSON, nullable=True)
-    duration_minutes = Column(Integer, nullable=True)
-    is_team_challenge = Column(Boolean, default=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-
-
-class ChallengeParticipation(Base):
-    __tablename__ = "challenge_participation"
-    id = Column(Integer, primary_key=True, index=True)
-    challenge_id = Column(String, ForeignKey("challenges.id"), index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), index=True)
-    status = Column(String, default="completed")
-    points_awarded = Column(Integer, default=0)
-    evidence = Column(JSON, nullable=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+# Challenge models now live in backend/models.py (Phase 2). This module intentionally
+# excludes Challenge/ChallengeParticipation to avoid duplicate table definitions.
 
 

@@ -41,6 +41,7 @@ from .models import Base, User, Text
 # from audio_logic import process_audio
 from passlib.context import CryptContext
 from .gamification.routes import router as gamification_router
+from .routes import challenges as challenges_router
 import os
 from typing import Dict, List
 from random import choice
@@ -65,6 +66,7 @@ app.add_middleware(
 
 # Register gamification router
 app.include_router(gamification_router)
+app.include_router(challenges_router.router, prefix="/api", tags=["challenges"]) 
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -159,6 +161,10 @@ def voice_chatbot_page(request: Request):
     Serve the Voice Chatbot page.
     """
     return templates.TemplateResponse("voice_chatbot.html", {"request": request})
+
+@app.get("/challenges", response_class=HTMLResponse)
+def challenges_page(request: Request):
+    return templates.TemplateResponse("challenges.html", {"request": request})
 
 @app.post("/api/ai-chat")
 async def voice_chat(input: TextInput):

@@ -4,7 +4,8 @@ from pathlib import Path
 from typing import List
 
 from ..database import get_db
-from . import crud, schemas, models
+from . import crud, schemas, models as gam_models
+from .. import models as core_models
 
 
 router = APIRouter(prefix="/gamification", tags=["gamification"])
@@ -12,10 +13,9 @@ router = APIRouter(prefix="/gamification", tags=["gamification"])
 
 @router.on_event("startup")
 def seed_catalog():
-    p = Path(__file__).parent / "catalog.json"
+    # Phase 2 uses core Challenge model (int id). Skip seeding JSON catalog.
     try:
-        db = next(get_db())
-        crud.seed_catalog_if_missing(db, str(p))
+        _ = next(get_db())
     except Exception:
         pass
 
@@ -23,38 +23,40 @@ def seed_catalog():
 @router.post("/assign", response_model=schemas.AssignResponse)
 def assign_challenge(payload: schemas.AssignRequest, db: Session = Depends(get_db)):
     score = payload.score
-    catalog = [c.__dict__ for c in db.query(models.Challenge).all()]
-    if not catalog:
-        raise HTTPException(400, "Challenge catalog is empty")
-    assigned = catalog[0]
+    # Fallback simple rule mapping using core Challenge.type
     if score < 30:
-        for c in catalog:
-            if "mood_boost" in (c.get("tags") or []):
-                assigned = c
-                break
+        ctype = "mood-game"
     elif score < 70:
-        assigned = catalog[0]
+        ctype = "fitness"
     else:
-        for c in catalog:
-            if "mobility" in (c.get("tags") or []) or str(c.get("id", "")).startswith("yoga"):
-                assigned = c
-                break
-    resp = {
+        ctype = "yoga"
+    ch = db.query(core_models.Challenge).filter(core_models.Challenge.type == ctype).first()
+    if not ch:
+        raise HTTPException(400, "No suitable challenge found; seed core challenges first")
+    assigned = {
+        "id": ch.id,
+        "title": ch.title,
+        "description": ch.description,
+        "base_points": ch.points,
+        "tags": [ctype],
+        "duration_minutes": None,
+        "is_team_challenge": False,
+    }
+    return {
         "user_id": payload.user_id,
         "assigned": assigned,
         "rationale": "Rule-based assignment",
         "next_check": "in_4_hours",
     }
-    return resp
 
 
 @router.post("/complete")
 def complete_challenge(payload: schemas.CompleteRequest, db: Session = Depends(get_db)):
-    challenge = db.query(models.Challenge).filter(models.Challenge.id == payload.challenge_id).first()
+    challenge = db.query(core_models.Challenge).filter(core_models.Challenge.id == payload.challenge_id).first()
     if not challenge:
         raise HTTPException(404, "Challenge not found")
-    points = challenge.base_points
-    participation = models.ChallengeParticipation(
+    points = challenge.points
+    participation = core_models.ChallengeParticipation(
         challenge_id=challenge.id,
         user_id=payload.user_id,
         status="completed",
@@ -62,7 +64,7 @@ def complete_challenge(payload: schemas.CompleteRequest, db: Session = Depends(g
         evidence=payload.evidence,
     )
     db.add(participation)
-    ledger = models.PointsLedger(user_id=payload.user_id, source="challenge", points=points)
+    ledger = gam_models.PointsLedger(user_id=payload.user_id, source="challenge", points=points)
     db.add(ledger)
     db.commit()
     return {"ok": True, "points_awarded": points}
