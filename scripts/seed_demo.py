@@ -12,13 +12,18 @@ import json
 import os
 import sys
 
+# Ensure project root is on sys.path for module imports
+ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT not in sys.path:
+	sys.path.insert(0, ROOT)
+
 # Adapt these imports if your project uses a different package name (mindsentry vs app)
 try:
 	from backend.database import SessionLocal
 	from backend import models as app_models
 	from backend.gamification import models as gam_models
 	# Optional modules; may not exist
-	from backend.activities import crud as act_crud  # type: ignore
+	act_crud = None
 except Exception as e:
 	print("ERROR: Could not import project modules. Adapt import paths in scripts/seed_demo.py to match your project.")
 	raise
@@ -123,10 +128,12 @@ def seed_activities_and_participations(db, users, challenges, fast=False):
 		for d in range(days):
 			date = now - timedelta(days=d)
 			steps = random.randint(200, 8000) if not fast else random.randint(100, 2000)
-			try:
-				_ = act_crud.create_activity(db, user_id=user.id, steps=steps, calories=int(steps * 0.04))
-			except Exception:
-				pass
+			# If activities module exists, seed steps there; otherwise skip
+			if act_crud is not None:
+				try:
+					_ = act_crud.create_activity(db, user_id=user.id, steps=steps, calories=int(steps * 0.04))
+				except Exception:
+					pass
 			activities_created += 1
 
 	# Create participations: make team 1 reach >=60% completion on a challenge
@@ -137,9 +144,9 @@ def seed_activities_and_participations(db, users, challenges, fast=False):
 		needed = max(1, int(len(team_to_win) * 0.6))
 		for i, u in enumerate(team_to_win):
 			if i < needed:
-				cp = db.query(gam_models.ChallengeParticipation).filter_by(user_id=u.id, challenge_id=getattr(target_challenge, "id")).first()
+				cp = db.query(app_models.ChallengeParticipation).filter_by(user_id=u.id, challenge_id=getattr(target_challenge, "id")).first()
 				if not cp:
-					cp = gam_models.ChallengeParticipation(user_id=u.id, challenge_id=getattr(target_challenge, "id"), status="completed", points_awarded=getattr(target_challenge, "points", 10))
+					cp = app_models.ChallengeParticipation(user_id=u.id, challenge_id=getattr(target_challenge, "id"), status="completed", score=getattr(target_challenge, "points", 10))
 					db.add(cp); db.commit(); db.refresh(cp)
 					participations_created += 1
 				try:
@@ -153,9 +160,9 @@ def seed_activities_and_participations(db, users, challenges, fast=False):
 		sample_users = random.sample(users, min(6, len(users)))
 		for u in sample_users:
 			if random.random() < 0.3:
-				cp = db.query(gam_models.ChallengeParticipation).filter_by(user_id=u.id, challenge_id=getattr(ch, "id")).first()
+				cp = db.query(app_models.ChallengeParticipation).filter_by(user_id=u.id, challenge_id=getattr(ch, "id")).first()
 				if not cp:
-					cp = gam_models.ChallengeParticipation(user_id=u.id, challenge_id=getattr(ch, "id"), status="completed", points_awarded=getattr(ch, "points", 10))
+					cp = app_models.ChallengeParticipation(user_id=u.id, challenge_id=getattr(ch, "id"), status="completed", score=getattr(ch, "points", 10))
 					db.add(cp); db.commit(); db.refresh(cp)
 					participations_created += 1
 					try:
