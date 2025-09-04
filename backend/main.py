@@ -46,6 +46,9 @@ from .leaderboard.routes import router as leaderboard_router
 from .team_challenges.routes import router as team_challenges_router
 from .agent.routes import router as agent_router
 from .analytics.routes import router as analytics_router
+from .wearables.routes import router as wearables_router
+from .hr.routes import router as hr_router
+from .monitoring.routes import router as monitoring_router
 import os
 from typing import Dict, List
 from random import choice
@@ -75,6 +78,9 @@ app.include_router(leaderboard_router, prefix="/api")
 app.include_router(team_challenges_router, prefix="/api")
 app.include_router(agent_router, prefix="/api")
 app.include_router(analytics_router, prefix="/api")
+app.include_router(wearables_router, prefix="/api")
+app.include_router(hr_router, prefix="/api")
+app.include_router(monitoring_router, prefix="/api")
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

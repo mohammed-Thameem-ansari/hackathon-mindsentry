@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from .schemas import RecommendationRequest, RecommendationResponse, EvaluateTriggerRequest
 from .agent_chain import recommend_for_user
+from .utils import can_call_agent
 
 
 router = APIRouter(prefix="/agent", tags=["agent"])
@@ -11,6 +12,8 @@ router = APIRouter(prefix="/agent", tags=["agent"])
 
 @router.post("/recommendation", response_model=RecommendationResponse)
 def recommendation(payload: RecommendationRequest, db: Session = Depends(get_db)):
+    if not can_call_agent(db, payload.user_id, cooldown_min=60):
+        raise HTTPException(429, "Agent cooldown: try later")
     res = recommend_for_user(db, payload.user_id)
     return res
 

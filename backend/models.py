@@ -2,7 +2,7 @@
 File: models.py
 Purpose: Defines database models using SQLAlchemy.
 """
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean
 from .database import Base
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -46,6 +46,7 @@ class Challenge(Base):
     type = Column(String)  # e.g., yoga, step, mood-game, fitness
     difficulty = Column(String)  # low, medium, high
     points = Column(Integer, default=10)
+    is_evidence_required = Column(Boolean, default=False)
 
 
 class ChallengeParticipation(Base):
