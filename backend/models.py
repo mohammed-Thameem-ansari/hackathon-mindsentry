@@ -2,8 +2,10 @@
 File: models.py
 Purpose: Defines database models using SQLAlchemy.
 """
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean
 from .database import Base
+from sqlalchemy.orm import relationship
+from datetime import datetime
 
 class User(Base):
     __tablename__ = "users"
@@ -34,3 +36,39 @@ class Therapy(Base):
     audio = Column(String, nullable=True)
     video = Column(String, nullable=True)
     quotes = Column(String, nullable=True)
+
+# Phase 2: Challenge System (core models for assignment/completion)
+class Challenge(Base):
+    __tablename__ = "challenges"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(String)
+    type = Column(String)  # e.g., yoga, step, mood-game, fitness
+    difficulty = Column(String)  # low, medium, high
+    points = Column(Integer, default=10)
+    is_evidence_required = Column(Boolean, default=False)
+
+
+class ChallengeParticipation(Base):
+    __tablename__ = "challenge_participation"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    challenge_id = Column(Integer, ForeignKey("challenges.id"))
+    status = Column(String, default="assigned")  # assigned, completed, failed
+    score = Column(Integer, default=0)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+    challenge = relationship("Challenge")
+
+# Phase 4.2: Team bonus event tracking (no FK to teams to avoid missing table)
+class TeamBonusEvent(Base):
+    __tablename__ = "team_bonus_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    team_id = Column(Integer)  # adapt to ForeignKey("teams.id") if teams table exists
+    challenge_id = Column(Integer, ForeignKey("challenges.id"))
+    percent = Column(Float, default=0.0)
+    awarded_at = Column(DateTime, default=datetime.utcnow)
+
+    challenge = relationship("Challenge")

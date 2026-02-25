@@ -1,6 +1,6 @@
-# MindSentry Nova
+# WellNova
 
-MindSentry Nova is an AI-powered mental health companion designed to enhance emotional well-being. It was developed as part of the Project-X Hackathon 2025.
+WellNova is an AI-powered mental health companion designed to enhance emotional well-being. It was developed as part of the Project-X Hackathon 2025.
 
 ----
 
@@ -34,7 +34,7 @@ MindSentry Nova is an AI-powered mental health companion designed to enhance emo
 1. **Clone the Repository**
    ```bash
    git clone <repo-link>
-   cd MindSentry-Nova
+   cd WellNova
    ```
 
 2. **Install Dependencies**

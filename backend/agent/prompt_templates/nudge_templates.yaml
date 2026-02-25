@@ -1,0 +1,12 @@
+motivate_low:
+  - "You're only {steps_away} steps from your daily goal — quick walk? 🚶"
+  - "Small step: 5-minute walk. Let's go! 👟"
+
+catchup_team:
+  - "Team is {delta} steps behind — 500-step burst to flip the board! 🔁"
+  - "Rally time — a short walk can beat them. Team up! 💪"
+
+recovery_calm:
+  - "Two-minute box breathing can help you reset. Try it now. 🌬️"
+
+

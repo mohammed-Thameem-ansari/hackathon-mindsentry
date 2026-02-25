@@ -1,0 +1,58 @@
+[
+  {
+    "id": "yoga_5",
+    "title": "5-min Desk Yoga",
+    "description": "Quick desk-friendly yoga to relax neck and shoulders.",
+    "base_points": 30,
+    "tags": ["mobility", "calm"],
+    "duration_minutes": 5,
+    "is_team_challenge": false
+  },
+  {
+    "id": "walk_500",
+    "title": "500 Step Break",
+    "description": "Take a 5–7 minute walk to hit 500 steps.",
+    "base_points": 20,
+    "tags": ["movement", "mood_boost"],
+    "duration_minutes": 10,
+    "is_team_challenge": false
+  },
+  {
+    "id": "dance_2",
+    "title": "2-min Dance Break",
+    "description": "Put on a song and dance for two minutes.",
+    "base_points": 25,
+    "tags": ["mood_boost"],
+    "duration_minutes": 2,
+    "is_team_challenge": false
+  },
+  {
+    "id": "stretch_desk",
+    "title": "3-min Desk Stretch",
+    "description": "Simple desk stretches to loosen up.",
+    "base_points": 15,
+    "tags": ["mobility"],
+    "duration_minutes": 3,
+    "is_team_challenge": false
+  },
+  {
+    "id": "breath_box",
+    "title": "2-min Box Breathing",
+    "description": "Box breathing to reduce stress.",
+    "base_points": 15,
+    "tags": ["calm", "mood_boost"],
+    "duration_minutes": 2,
+    "is_team_challenge": false
+  },
+  {
+    "id": "gratitude_1",
+    "title": "Share a Gratitude",
+    "description": "Post 1 positive note in team chat.",
+    "base_points": 10,
+    "tags": ["social", "mood_boost"],
+    "duration_minutes": 1,
+    "is_team_challenge": false
+  }
+]
+
+

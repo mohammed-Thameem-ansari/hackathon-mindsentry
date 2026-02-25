@@ -32,12 +32,23 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy import MetaData
+
+
 from .sentiment import analyze_sentiment
 from .transcription import transcribe_audio
 from .database import engine, get_db
 from .models import Base, User, Text
 # from audio_logic import process_audio
 from passlib.context import CryptContext
+from .gamification.routes import router as gamification_router
+from .routes import challenges as challenges_router
+from .leaderboard.routes import router as leaderboard_router
+from .team_challenges.routes import router as team_challenges_router
+from .agent.routes import router as agent_router
+from .analytics.routes import router as analytics_router
+from .wearables.routes import router as wearables_router
+from .hr.routes import router as hr_router
+from .monitoring.routes import router as monitoring_router
 import os
 from typing import Dict, List
 from random import choice
@@ -59,6 +70,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register gamification router
+app.include_router(gamification_router)
+app.include_router(challenges_router.router, prefix="/api", tags=["challenges"]) 
+app.include_router(leaderboard_router, prefix="/api")
+app.include_router(team_challenges_router, prefix="/api")
+app.include_router(agent_router, prefix="/api")
+app.include_router(analytics_router, prefix="/api")
+app.include_router(wearables_router, prefix="/api")
+app.include_router(hr_router, prefix="/api")
+app.include_router(monitoring_router, prefix="/api")
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -153,6 +175,10 @@ def voice_chatbot_page(request: Request):
     Serve the Voice Chatbot page.
     """
     return templates.TemplateResponse("voice_chatbot.html", {"request": request})
+
+@app.get("/challenges", response_class=HTMLResponse)
+def challenges_page(request: Request):
+    return templates.TemplateResponse("challenges.html", {"request": request})
 
 @app.post("/api/ai-chat")
 async def voice_chat(input: TextInput):
